@@ -1,0 +1,49 @@
+/* public/style.css */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  #meetings {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  #meetings h1 {
+    text-align: center;
+  }
+  
+  #meeting-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  #meeting-list li {
+    margin-bottom: 10px;
+  }
+  
+  #schedule-form {
+    max-width: 800px;
+    margin: 20px auto;
+  }
+  
+  #schedule-form h2 {
+    text-align: center;
+  }
+  
+  #schedule-meeting-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  #schedule-meeting-form label {
+    margin-bottom: 5px;
+  }
+  
+  #schedule-meeting-form input,
+  #schedule-meeting-form button {
+    margin-bottom: 10px;
+  }
+  

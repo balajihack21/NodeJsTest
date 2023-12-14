@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <title>Meeting Management App</title>
+</head>
+<body>
+  <div id="meetings">
+    <h1>Available Meetings</h1>
+    <ul id="meeting-list"></ul>
+  </div>
+  <div id="schedule-form">
+    <h2>Schedule a Meeting</h2>
+    <form id="schedule-meeting-form">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required>
+      <label for="email">Email:</label>
+      <input type="text" id="email" name="email" required>
+      <button type="submit">Schedule Meeting</button>
+    </form>
+  </div>
+  <script crossorigin="anonymous" src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.23.0/axios.min.js"></script>
+
+<script>
+   // public/app.js
+document.addEventListener('DOMContentLoaded', async () => {
+  // Fetch and display available meetings
+  const meetingList = document.getElementById('meeting-list');
+  const meetings = await fetchMeetings();
+  meetings.forEach((meeting) => {
+    const li = document.createElement('li');
+    li.innerHTML = `<strong>${meeting.time}</strong> - 
+                    Available Slots: ${meeting.availableSlots} 
+                    <button data-id="${meeting.id}" class="schedule-button">Schedule</button>`;
+    meetingList.appendChild(li);
+  });
+
+  // Add event listener to the schedule button
+  document.addEventListener('click', async (event) => {
+    if (event.target.classList.contains('schedule-button')) {
+      const meetingId = event.target.dataset.id;
+      await scheduleMeeting(meetingId);
+      // Refresh the meeting list after scheduling
+      meetingList.innerHTML = '';
+      const updatedMeetings = await fetchMeetings();
+      updatedMeetings.forEach((meeting) => {
+        const li = document.createElement('li');
+        li.innerHTML = `<strong>${meeting.time}</strong> - 
+                        Available Slots: ${meeting.availableSlots} 
+                        <button data-id="${meeting.id}" class="schedule-button">Schedule</button>`;
+        meetingList.appendChild(li);
+      });
+    }
+  });
+
+  // Add event listener to the form for scheduling a new meeting
+  const scheduleForm = document.getElementById('schedule-meeting-form');
+  scheduleForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const title = document.getElementById('title').value;
+    const startTime = document.getElementById('startTime').value;
+    const endTime = document.getElementById('endTime').value;
+    await createMeeting(title, startTime, endTime);
+    // Refresh the meeting list after scheduling
+    meetingList.innerHTML = '';
+    const updatedMeetings = await fetchMeetings();
+    updatedMeetings.forEach((meeting) => {
+      const li = document.createElement('li');
+      li.innerHTML = `<strong>${meeting.time}</strong> - 
+                      Available Slots: ${meeting.availableSlots} 
+                      <button data-id="${meeting.id}" class="schedule-button">Schedule</button>`;
+      meetingList.appendChild(li);
+    });
+  });
+});
+
+async function fetchMeetings() {
+  try {
+    const response = await axios.get('http://localhost:4000/meetings');
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+}
+
+async function scheduleMeeting(meetingId) {
+  try {
+    await axios.put(`http://localhost:4000/${meetingId}`,);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+async function createMeeting(title, startTime, endTime) {
+  try {
+    await axios.delete('http://localhost:4000/meetings', { title, startTime, endTime });
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+</script>
+
+</body>
+</html>
